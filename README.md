@@ -16,3 +16,12 @@ welcome to [SuperEx](https://www.superex.com/)
 
 - [build local node](./docs/build-node-local.md)
 - [build docker node](./docs/build-node-docker.md)
+
+## document
+
+[https://superexchain.github.io/](https://superexchain.github.io/)
+
+
+## License
+This project is licensed under the LICENSE_APACHE2. See the LICENSE file for details.
+
