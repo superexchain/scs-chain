@@ -23,5 +23,5 @@ welcome to [SuperEx](https://www.superex.com/)
 
 
 ## License
-This project is licensed under the LICENSE_APACHE2. See the LICENSE file for details.
+This project is licensed under the [LICENSE_APACHE2](./LICENSE_APACHE2). See the LICENSE file for details.
 
