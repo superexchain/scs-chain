@@ -37,19 +37,19 @@ use polkadot_sdk::{
 use sp_core::U256;
 // use sp_runtime::traits::Block as BlockT;
 // use codec::Encode;
+use common_runtime::opaque::Block;
 use frame_benchmarking_cli::SUBSTRATE_REFERENCE_HARDWARE;
 use frame_system_rpc_runtime_api::AccountNonceApi;
 use futures::prelude::*;
-use common_runtime::opaque::Block;
-#[cfg(feature="scs")]
-use kitchensink_mainnet_runtime::{RuntimeApi};
-#[cfg(feature="tscs")]
-use kitchensink_testnet_runtime::{RuntimeApi};
+#[cfg(feature = "scs")]
+use kitchensink_mainnet_runtime::RuntimeApi;
+#[cfg(feature = "tscs")]
+use kitchensink_testnet_runtime::RuntimeApi;
 // use node_primitives::Block;
 use fc_storage::StorageOverrideHandler;
-#[cfg(feature="scs")]
+#[cfg(feature = "scs")]
 use kitchensink_mainnet_runtime::TransactionConverter;
-#[cfg(feature="tscs")]
+#[cfg(feature = "tscs")]
 use kitchensink_testnet_runtime::TransactionConverter;
 use sc_client_api::{Backend as BackendT, BlockBackend};
 use sc_consensus_babe::{self, BabeWorkerHandle, SlotProportion};
@@ -63,7 +63,7 @@ use sc_telemetry::{Telemetry, TelemetryWorker};
 use sc_transaction_pool_api::OffchainTransactionPoolFactory;
 use sp_api::ProvideRuntimeApi;
 use sp_core::crypto::Pair;
-use sp_runtime::{traits::Block as BlockT};
+use sp_runtime::traits::Block as BlockT;
 use std::{path::Path, sync::Arc};
 // use crate::client::{FullBackend, FullClient};
 
@@ -330,7 +330,7 @@ where
     let statement_store = sc_statement_store::Store::new_shared(
         &config.data_path,
         Default::default(),
-        client.clone(),          
+        client.clone(),
         keystore_container.local_keystore(),
         config.prometheus_registry(),
         &task_manager.spawn_handle(),
@@ -715,7 +715,10 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
                     // mixnet_api: mixnet_api.as_ref().cloned(),
                     eth: eth_deps,
                 };
-                let pending_consenus_data_provider = Box::new(BabeConsensusDataProvider::new(client.clone(), keystore.clone()));
+                let pending_consenus_data_provider = Box::new(BabeConsensusDataProvider::new(
+                    client.clone(),
+                    keystore.clone(),
+                ));
                 node_rpc::create_full(
                     deps,
                     subscription_executor,

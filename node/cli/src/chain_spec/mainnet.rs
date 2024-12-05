@@ -20,11 +20,10 @@
 
 #![allow(unused_imports)]
 
+use common_runtime::AccountId;
 use hex_literal::hex;
-use common_runtime::{AccountId};
 use kitchensink_mainnet_runtime::{
-    constants::currency::*, wasm_binary_unwrap, Block, MaxNominations, SessionKeys,
-    StakerStatus,
+    constants::currency::*, wasm_binary_unwrap, Block, MaxNominations, SessionKeys, StakerStatus,
 };
 use pallet_im_online::sr25519::AuthorityId as ImOnlineId;
 use polkadot_sdk::*;
@@ -202,8 +201,7 @@ fn configure_accounts_for_staging_testnet() -> (
 fn staging_testnet_config_genesis(chain_id: u32) -> serde_json::Value {
     let (initial_authorities, root_key, endowed_accounts) =
         configure_accounts_for_staging_testnet();
-    let extra_endowed_accounts_balance = vec![
-    ];
+    let extra_endowed_accounts_balance = vec![];
     testnet_genesis(
         initial_authorities,
         vec![],
@@ -392,12 +390,13 @@ pub fn testnet_genesis(
     extra_endowed_accounts_balance: Vec<(AccountId, u128)>,
     evm_chain_id: u32,
 ) -> serde_json::Value {
-    let (initial_authorities, endowed_accounts, _num_endowed_accounts, stakers) = configure_accounts(
-        initial_authorities,
-        initial_nominators,
-        endowed_accounts,
-        STASH,
-    );
+    let (initial_authorities, endowed_accounts, _num_endowed_accounts, stakers) =
+        configure_accounts(
+            initial_authorities,
+            initial_nominators,
+            endowed_accounts,
+            STASH,
+        );
 
     serde_json::json!({
         "balances": {
@@ -491,7 +490,6 @@ pub fn development_config() -> ChainSpec {
         .with_genesis_config_patch(development_config_genesis_json())
         .build()
 }
-
 
 #[cfg(test)]
 pub(crate) mod tests {

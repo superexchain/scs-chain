@@ -22,10 +22,9 @@
 
 use hex_literal::hex;
 // todo
-use common_runtime::{AccountId};
+use common_runtime::AccountId;
 use kitchensink_testnet_runtime::{
-    constants::currency::*, wasm_binary_unwrap, Block, MaxNominations, SessionKeys,
-    StakerStatus,
+    constants::currency::*, wasm_binary_unwrap, Block, MaxNominations, SessionKeys, StakerStatus,
 };
 use pallet_im_online::sr25519::AuthorityId as ImOnlineId;
 use polkadot_sdk::*;
@@ -417,12 +416,13 @@ pub fn testnet_genesis(
     extra_endowed_accounts_balance: Vec<(AccountId, u128)>,
     evm_chain_id: u32,
 ) -> serde_json::Value {
-    let (initial_authorities, endowed_accounts, _num_endowed_accounts, stakers) = configure_accounts(
-        initial_authorities,
-        initial_nominators,
-        endowed_accounts,
-        STASH,
-    );
+    let (initial_authorities, endowed_accounts, _num_endowed_accounts, stakers) =
+        configure_accounts(
+            initial_authorities,
+            initial_nominators,
+            endowed_accounts,
+            STASH,
+        );
 
     // let evm_accounts = {
     // 	let mut map = BTreeMap::new();

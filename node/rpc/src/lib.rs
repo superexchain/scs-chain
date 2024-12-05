@@ -39,6 +39,7 @@ use std::sync::Arc;
 
 use common_runtime::opaque::Block;
 use common_runtime::{AccountId, Balance, BlockNumber, Hash, Nonce};
+use fc_rpc::pending::ConsensusDataProvider;
 use jsonrpsee::RpcModule;
 use sc_client_api::AuxStore;
 use sc_client_api::{backend::StorageProvider, client::BlockchainEvents, UsageProvider};
@@ -49,10 +50,9 @@ use sc_consensus_beefy::communication::notification::{
 use sc_consensus_grandpa::{
     FinalityProofProvider, GrandpaJustificationStream, SharedAuthoritySet, SharedVoterState,
 };
-use fc_rpc::pending::ConsensusDataProvider;
 pub use sc_rpc::SubscriptionTaskExecutor;
 pub use sc_rpc_api::DenyUnsafe;
-use sc_transaction_pool::{ChainApi,};
+use sc_transaction_pool::ChainApi;
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::{CallApiAt, ProvideRuntimeApi};
 use sp_application_crypto::RuntimeAppPublic;

@@ -26,12 +26,12 @@ use crate::{
     service::{new_partial, FullClient},
     Cli, Subcommand,
 };
-use frame_benchmarking_cli::*;
 use common_runtime::opaque::Block;
+use frame_benchmarking_cli::*;
 
-#[cfg(feature="scs")]
+#[cfg(feature = "scs")]
 use kitchensink_mainnet_runtime::{ExistentialDeposit, RuntimeApi};
-#[cfg(feature="tscs")]
+#[cfg(feature = "tscs")]
 use kitchensink_testnet_runtime::{ExistentialDeposit, RuntimeApi};
 
 use sc_network::{Litep2pNetworkBackend, NetworkBackend};
@@ -69,7 +69,7 @@ impl SubstrateCli for Cli {
     }
 
     fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
-        #[cfg(feature="scs")]
+        #[cfg(feature = "scs")]
         let spec = match id {
             "" | "mainnet" => Box::new(chain_spec::mainnet::scs_config()?),
             "scs-local" => Box::new(chain_spec::mainnet::staging_testnet_config()),
@@ -78,7 +78,7 @@ impl SubstrateCli for Cli {
             )?),
         };
 
-        #[cfg(feature="tscs")]
+        #[cfg(feature = "tscs")]
         let spec = match id {
             "staging" | "testnet" | "" => Box::new(chain_spec::testnet::tscs_config()?),
             "tscs-local" => Box::new(chain_spec::testnet::staging_testnet_config()),
@@ -88,7 +88,6 @@ impl SubstrateCli for Cli {
         };
         Ok(spec)
     }
-
 }
 
 /// Parse command line arguments into service configuration.

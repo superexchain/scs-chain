@@ -19,18 +19,13 @@
 
 use polkadot_sdk::*;
 
-use frame_support::{
-    traits::{
-        fungibles::{Balanced, Credit},
-        Currency, OnUnbalanced,
-    },
+use frame_support::traits::{
+    fungibles::{Balanced, Credit},
+    Currency, OnUnbalanced,
 };
 use pallet_asset_tx_payment::HandleCredit;
 
-use crate::{
-    AccountId, Assets, Authorship, Balances, 
-    NegativeImbalance, Runtime, 
-};
+use crate::{AccountId, Assets, Authorship, Balances, NegativeImbalance, Runtime};
 
 pub struct Author;
 impl OnUnbalanced<NegativeImbalance> for Author {
