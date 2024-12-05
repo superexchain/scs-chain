@@ -246,7 +246,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     // and set impl_version to 0. If only runtime
     // implementation changes and behavior does not, then leave spec_version as
     // is and increment impl_version.
-    spec_version: 273,
+    spec_version: 274,
     impl_version: 0,
     apis: RUNTIME_API_VERSIONS,
     transaction_version: 2,
@@ -336,7 +336,20 @@ parameter_types! {
 pub struct BaseCallFilter;
 impl Contains<RuntimeCall> for BaseCallFilter {
     fn contains(t: &RuntimeCall) -> bool {
-        matches!(t, RuntimeCall::Balances(..) | RuntimeCall::Vesting(..))
+        match t {
+            RuntimeCall::Balances(c) => {
+                match c {
+                    pallet_balances::Call::force_set_balance { .. } => true,
+                    _ => false,
+                    
+                }
+             
+            },
+
+            RuntimeCall::Vesting(..) => false,
+            _ => true,
+            
+        }
     }
 }
 
