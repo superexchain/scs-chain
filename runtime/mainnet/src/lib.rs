@@ -350,7 +350,6 @@ impl frame_system::Config for Runtime {
     type Hash = Hash;
     type Hashing = Hashing;
     type AccountId = AccountId;
-    // fixme
     type Lookup = sp_runtime::traits::IdentityLookup<AccountId>;
     type Block = Block;
     type BlockHashCount = BlockHashCount;
@@ -585,7 +584,6 @@ impl pallet_preimage::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type Currency = Balances;
     type ManagerOrigin = EnsureRoot<AccountId>;
-    // fixme
     type Consideration = ();
 }
 
