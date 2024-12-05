@@ -18,6 +18,8 @@
 
 //! Substrate chain configurations.
 
+#![allow(unused_imports)]
+
 use hex_literal::hex;
 use common_runtime::{AccountId};
 use kitchensink_mainnet_runtime::{
@@ -28,14 +30,14 @@ use pallet_im_online::sr25519::AuthorityId as ImOnlineId;
 use polkadot_sdk::*;
 use sc_chain_spec::ChainSpecExtension;
 use sc_service::ChainType;
-use sc_telemetry::TelemetryEndpoints;
+// use sc_telemetry::TelemetryEndpoints;
 use serde::{Deserialize, Serialize};
 use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use sp_consensus_babe::AuthorityId as BabeId;
 use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
 use sp_consensus_grandpa::AuthorityId as GrandpaId;
 use sp_core::ecdsa;
-use sp_core::{crypto::UncheckedInto, sr25519, Pair, Public};
+use sp_core::{crypto::UncheckedInto, Pair, Public};
 use sp_core::{H160, U256};
 use sp_mixnet::types::AuthorityId as MixnetId;
 use sp_runtime::{
@@ -71,10 +73,6 @@ pub struct Extensions {
 
 /// Specialized `ChainSpec`.
 pub type ChainSpec = sc_service::GenericChainSpec<Extensions>;
-/// Flaming Fir testnet generator
-// pub fn flaming_fir_config() -> Result<ChainSpec, String> {
-// 	ChainSpec::from_json_bytes(&include_bytes!("../res/flaming-fir.json")[..])
-// }
 
 pub fn scs_config() -> Result<ChainSpec, String> {
     ChainSpec::from_json_bytes(&include_bytes!("../../res/scs-chain-spec.json")[..])
@@ -205,14 +203,6 @@ fn staging_testnet_config_genesis(chain_id: u32) -> serde_json::Value {
     let (initial_authorities, root_key, endowed_accounts) =
         configure_accounts_for_staging_testnet();
     let extra_endowed_accounts_balance = vec![
-        // (
-        //     AccountId::from(hex!("8B3f123cf9F3b2E147142d3e99396695c09A34E7")),
-        //     100_000_000 * DOLLARS,
-        // ),
-        // (
-        //     AccountId::from(hex!("93A3A1c3dbccdbA8Df744a97f4Cc702e2F8663D1")),
-        //     50_000_000 * DOLLARS,
-        // ),
     ];
     testnet_genesis(
         initial_authorities,
@@ -368,22 +358,10 @@ fn configure_accounts(
         });
 
     // stakers: all validators and nominators.
-    let mut rng = rand::thread_rng();
+    // let mut rng = rand::thread_rng();
     let stakers = initial_authorities
         .iter()
         .map(|x| (x.0.clone(), x.0.clone(), stash, StakerStatus::Validator))
-        // .chain(initial_nominators.iter().map(|x| {
-        // 	use rand::{seq::SliceRandom, Rng};
-        // 	let limit = (MaxNominations::get() as usize).min(initial_authorities.len());
-        // 	let count = rng.gen::<usize>() % limit;
-        // 	let nominations = initial_authorities
-        // 		.as_slice()
-        // 		.choose_multiple(&mut rng, count)
-        // 		.into_iter()
-        // 		.map(|choice| choice.0.clone())
-        // 		.collect::<Vec<_>>();
-        // 	(x.clone(), x.clone(), stash, StakerStatus::Nominator(nominations))
-        // }))
         .collect::<Vec<_>>();
 
     let num_endowed_accounts = endowed_accounts.len();
@@ -414,56 +392,12 @@ pub fn testnet_genesis(
     extra_endowed_accounts_balance: Vec<(AccountId, u128)>,
     evm_chain_id: u32,
 ) -> serde_json::Value {
-    let (initial_authorities, endowed_accounts, num_endowed_accounts, stakers) = configure_accounts(
+    let (initial_authorities, endowed_accounts, _num_endowed_accounts, stakers) = configure_accounts(
         initial_authorities,
         initial_nominators,
         endowed_accounts,
         STASH,
     );
-
-    // let evm_accounts = {
-    // 	let mut map = BTreeMap::new();
-    // map.insert(
-    // 	// H160 address of Alice dev account
-    // 	// Derived from SS58 (42 prefix) address
-    // 	// SS58: 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
-    // 	// hex: 0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d
-    // 	// Using the full hex key, truncating to the first 20 bytes (the first 40 hex chars)
-    // 	H160::from_str("d43593c715fdd31c61141abd04a99fd6822c8558")
-    // 		.expect("internal H160 is valid; qed"),
-    // 	fp_evm::GenesisAccount {
-    // 		balance: U256::from_str("0xffffffffffffffffffffffffffffffff")
-    // 			.expect("internal U256 is valid; qed"),
-    // 		code: Default::default(),
-    // 		nonce: Default::default(),
-    // 		storage: Default::default(),
-    // 	},
-    // );
-    // map.insert(
-    // 	// H160 address of CI test runner account
-    // 	H160::from_str("6be02d1d3665660d22ff9624b7be0551ee1ac91b")
-    // 		.expect("internal H160 is valid; qed"),
-    // 	fp_evm::GenesisAccount {
-    // 		balance: U256::from_str("0xffffffffffffffffffffffffffffffff")
-    // 			.expect("internal U256 is valid; qed"),
-    // 		code: Default::default(),
-    // 		nonce: Default::default(),
-    // 		storage: Default::default(),
-    // 	},
-    // );
-    // map.insert(
-    // 	// H160 address for benchmark usage
-    // 	H160::from_str("1000000000000000000000000000000000000001")
-    // 		.expect("internal H160 is valid; qed"),
-    // 	fp_evm::GenesisAccount {
-    // 		nonce: U256::from(1),
-    // 		balance: U256::from(1_000_000_000_000_000_000_000_000u128),
-    // 		storage: Default::default(),
-    // 		code: vec![0x00],
-    // 	},
-    // );
-    // 	map
-    // };
 
     serde_json::json!({
         "balances": {
@@ -500,35 +434,18 @@ pub fn testnet_genesis(
             "slashRewardFraction": Perbill::from_percent(10),
             "stakers": stakers.clone(),
         },
-        // "elections": {
-        // 	"members": endowed_accounts
-        // 		.iter()
-        // 		.take((num_endowed_accounts + 1) / 2)
-        // 		.cloned()
-        // 		.map(|member| (member, STASH))
-        // 		.collect::<Vec<_>>(),
-        // },
-        // "technicalCommittee": {
-        // 	"members": endowed_accounts
-        // 		.iter()
-        // 		.take((num_endowed_accounts + 1) / 2)
-        // 		.cloned()
-        // 		.collect::<Vec<_>>(),
-        // },
+
         "sudo": { "key": Some(root_key.clone()) },
         "babe": {
             "epochConfig": Some(kitchensink_mainnet_runtime::BABE_GENESIS_EPOCH_CONFIG),
         },
         "society": { "pot": 0 },
-        // "assets": {
-        // 	"assets": vec![],
-        // },
+
         "nominationPools": {
             "minCreateBond": 10 * DOLLARS,
             "minJoinBond": 1 * DOLLARS,
         },
         "evmChainId": { "chainId": evm_chain_id },
-        // "evm": { "accounts": evm_accounts },
     })
 }
 
@@ -564,9 +481,7 @@ pub fn development_config() -> ChainSpec {
     ChainSpec::builder(wasm_binary_unwrap(), Default::default())
         .with_name("Development")
         .with_id("dev")
-        // .with_id()
         .with_chain_type(ChainType::Development)
-        // .with_properties(serde_json::from_str("{\"tokenDecimals\": 18, \"tokenSymbol\": \"TSCS\"}")
         .with_properties(
             serde_json::from_str(
                 "{\"isEthereum\": true, \"tokenDecimals\": 18, \"tokenSymbol\": \"TSCS\"}",
@@ -577,24 +492,6 @@ pub fn development_config() -> ChainSpec {
         .build()
 }
 
-// fn local_testnet_genesis() -> serde_json::Value {
-// 	testnet_genesis(
-// 		vec![authority_keys_from_seed("Alice"), authority_keys_from_seed("Bob")],
-// 		vec![],
-// 		get_account_id_from_seed::<ecdsa::Public>("Alice"),
-// 		None,
-// 	)
-// }
-//
-// /// Local testnet config (multivalidator Alice + Bob).
-// pub fn local_testnet_config() -> ChainSpec {
-// 	ChainSpec::builder(wasm_binary_unwrap(), Default::default())
-// 		.with_name("Local Testnet")
-// 		.with_id("local_testnet")
-// 		.with_chain_type(ChainType::Local)
-// 		.with_genesis_config_patch(local_testnet_genesis())
-// 		.build()
-// }
 
 #[cfg(test)]
 pub(crate) mod tests {

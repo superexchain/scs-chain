@@ -1,3 +1,5 @@
+#![allow(missing_docs)]
+
 pub use crate::cli::{BackendType, EthConfiguration};
 use futures::{future, prelude::*};
 use polkadot_sdk::*;

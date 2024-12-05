@@ -16,7 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#![warn(unused_extern_crates)]
+#![allow(unused_extern_crates)]
+#![allow(unused_imports)]
 
 //! Service implementation. Specialized wrapper over substrate service.
 
@@ -32,10 +33,10 @@ use polkadot_sdk::{
     sc_consensus_beefy as beefy, sc_consensus_grandpa as grandpa,
     sp_consensus_beefy as beefy_primitives, *,
 };
-use sc_network::Litep2pNetworkBackend;
+// use sc_network::Litep2pNetworkBackend;
 use sp_core::U256;
 // use sp_runtime::traits::Block as BlockT;
-use codec::Encode;
+// use codec::Encode;
 use frame_benchmarking_cli::SUBSTRATE_REFERENCE_HARDWARE;
 use frame_system_rpc_runtime_api::AccountNonceApi;
 use futures::prelude::*;
@@ -62,7 +63,7 @@ use sc_telemetry::{Telemetry, TelemetryWorker};
 use sc_transaction_pool_api::OffchainTransactionPoolFactory;
 use sp_api::ProvideRuntimeApi;
 use sp_core::crypto::Pair;
-use sp_runtime::{generic, traits::Block as BlockT, SaturatedConversion};
+use sp_runtime::{traits::Block as BlockT};
 use std::{path::Path, sync::Arc};
 // use crate::client::{FullBackend, FullClient};
 
@@ -193,8 +194,8 @@ pub fn fetch_nonce(client: &FullClient, account: sp_core::ecdsa::Pair) -> u32 {
 /// Creates a new partial node.
 pub fn new_partial<NB>(
     config: &Configuration,
-    eth_config: &EthConfiguration,
-    mixnet_config: Option<&sc_mixnet::Config>,
+    _eth_config: &EthConfiguration,
+    _mixnet_config: Option<&sc_mixnet::Config>,
 ) -> Result<
     sc_service::PartialComponents<
         FullClient,
@@ -326,11 +327,10 @@ where
         })?;
 
     let import_setup = (block_import, grandpa_link, babe_link, beefy_voter_links);
-    /// todo 判断验证人集合是不是0 是0直接panic
     let statement_store = sc_statement_store::Store::new_shared(
         &config.data_path,
         Default::default(),
-        client.clone(),
+        client.clone(),          
         keystore_container.local_keystore(),
         config.prometheus_registry(),
         &task_manager.spawn_handle(),
@@ -479,18 +479,18 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
         );
     net_config.add_notification_protocol(statement_config);
 
-    let mixnet_protocol_name =
-        sc_mixnet::protocol_name(genesis_hash.as_ref(), config.chain_spec.fork_id());
-    let mixnet_notification_service = mixnet_config.as_ref().map(|mixnet_config| {
-        let (config, notification_service) = sc_mixnet::peers_set_config::<_, N>(
-            mixnet_protocol_name.clone(),
-            mixnet_config,
-            metrics.clone(),
-            Arc::clone(&peer_store_handle),
-        );
-        net_config.add_notification_protocol(config);
-        notification_service
-    });
+    // let mixnet_protocol_name =
+    //     sc_mixnet::protocol_name(genesis_hash.as_ref(), config.chain_spec.fork_id());
+    // let mixnet_notification_service = mixnet_config.as_ref().map(|mixnet_config| {
+    //     let (config, notification_service) = sc_mixnet::peers_set_config::<_, N>(
+    //         mixnet_protocol_name.clone(),
+    //         mixnet_config,
+    //         metrics.clone(),
+    //         Arc::clone(&peer_store_handle),
+    //     );
+    //     net_config.add_notification_protocol(config);
+    //     notification_service
+    // });
 
     let warp_sync = Arc::new(grandpa::warp_proof::NetworkProvider::new(
         backend.clone(),
@@ -561,11 +561,11 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
         let keystore = keystore_container.keystore();
         let chain_spec = config.chain_spec.cloned_box();
 
-        let mut net_config = sc_network::config::FullNetworkConfiguration::<
-            Block,
-            <Block as BlockT>::Hash,
-            Litep2pNetworkBackend,
-        >::new(&config.network);
+        // let net_config = sc_network::config::FullNetworkConfiguration::<
+        //     Block,
+        //     <Block as BlockT>::Hash,
+        //     Litep2pNetworkBackend,
+        // >::new(&config.network);
 
         let frontier_backend = match eth_config.frontier_backend_type {
             BackendType::KeyValue => FrontierBackend::KeyValue(Arc::new(fc_db::kv::Backend::open(
@@ -600,9 +600,9 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
         let frontier_backend2 = frontier_backend1.clone();
         // todo warp_sync_params
 
-        let metrics = N::register_notification_metrics(
-            config.prometheus_config.as_ref().map(|cfg| &cfg.registry),
-        );
+        // let metrics = N::register_notification_metrics(
+        //     config.prometheus_config.as_ref().map(|cfg| &cfg.registry),
+        // );
         // let (network, system_rpc_tx, tx_handler_controller, network_starter, sync_service) =
         // 	sc_service::build_network(sc_service::BuildNetworkParams {
         // 		config: &config,

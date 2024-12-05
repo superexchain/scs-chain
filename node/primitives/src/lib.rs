@@ -24,7 +24,6 @@ use fp_account::EthereumSignature;
 use sp_runtime::{
     generic,
     traits::{BlakeTwo256, IdentifyAccount, Verify},
-    MultiSignature, OpaqueExtrinsic,
 };
 // use sp_runtime::generic::UncheckedExtrinsic;
 

@@ -18,6 +18,8 @@
 
 //! Substrate chain configurations.
 
+#![allow(unused_imports)]
+
 use hex_literal::hex;
 // todo
 use common_runtime::{AccountId};
@@ -369,7 +371,7 @@ fn configure_accounts(
         });
 
     // stakers: all validators and nominators.
-    let mut rng = rand::thread_rng();
+    // let mut rng = rand::thread_rng();
     let stakers = initial_authorities
         .iter()
         .map(|x| (x.0.clone(), x.0.clone(), stash, StakerStatus::Validator))
@@ -415,7 +417,7 @@ pub fn testnet_genesis(
     extra_endowed_accounts_balance: Vec<(AccountId, u128)>,
     evm_chain_id: u32,
 ) -> serde_json::Value {
-    let (initial_authorities, endowed_accounts, num_endowed_accounts, stakers) = configure_accounts(
+    let (initial_authorities, endowed_accounts, _num_endowed_accounts, stakers) = configure_accounts(
         initial_authorities,
         initial_nominators,
         endowed_accounts,

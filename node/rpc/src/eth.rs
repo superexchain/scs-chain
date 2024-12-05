@@ -1,5 +1,5 @@
+#![allow(unexpected_cfgs)]
 use std::{collections::BTreeMap, sync::Arc};
-
 use jsonrpsee::RpcModule;
 // Substrate
 use common_runtime::opaque::Block;
@@ -17,7 +17,6 @@ use sc_transaction_pool_api::TransactionPool;
 use sp_api::{CallApiAt, ProvideRuntimeApi};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
 use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
-use sp_consensus_aura::{sr25519::AuthorityId as AuraId, AuraApi};
 use sp_core::H256;
 use sp_inherents::CreateInherentDataProviders;
 use sp_runtime::traits::Block as BlockT;

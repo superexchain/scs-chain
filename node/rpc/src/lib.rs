@@ -28,8 +28,8 @@
 //! are part of it. Therefore all node-runtime-specific RPCs can
 //! be placed here or imported from corresponding FRAME RPC definitions.
 
-#![warn(missing_docs)]
-#![warn(unused_crate_dependencies)]
+#![allow(missing_docs)]
+#![allow(unused_crate_dependencies)]
 
 mod eth;
 pub use eth::*;
@@ -46,14 +46,13 @@ use sc_consensus_babe::BabeWorkerHandle;
 use sc_consensus_beefy::communication::notification::{
     BeefyBestBlockStream, BeefyVersionedFinalityProofStream,
 };
-use sc_consensus_grandpa::GrandpaApi;
 use sc_consensus_grandpa::{
     FinalityProofProvider, GrandpaJustificationStream, SharedAuthoritySet, SharedVoterState,
 };
 use fc_rpc::pending::ConsensusDataProvider;
 pub use sc_rpc::SubscriptionTaskExecutor;
 pub use sc_rpc_api::DenyUnsafe;
-use sc_transaction_pool::{ChainApi, Pool};
+use sc_transaction_pool::{ChainApi,};
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::{CallApiAt, ProvideRuntimeApi};
 use sp_application_crypto::RuntimeAppPublic;
@@ -61,17 +60,9 @@ use sp_block_builder::BlockBuilder;
 use sp_blockchain::Backend as BlockchainBackend;
 use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
 use sp_consensus::SelectChain;
-use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-use sp_consensus_babe::BabeApi;
 use sp_consensus_beefy::AuthorityIdBound;
 use sp_keystore::KeystorePtr;
 use sp_runtime::traits::Block as BlockT;
-use sp_runtime::traits::HashingFor;
-use sp_runtime::traits::NumberFor;
-use sp_runtime::traits::{Hash as HashT, Header as HeaderT};
-// use sc_rpc_api::chain::ChainApi;
-// use sc_consensus_grandpa_rpc::GrandpaApi;
-// use sc_transaction_pool::{ChainApi, Pool};
 
 /// Extra dependencies for BABE.
 pub struct BabeDeps {
@@ -196,7 +187,7 @@ where
     use sc_consensus_grandpa_rpc::{Grandpa, GrandpaApiServer};
     use sc_rpc::{
         dev::{Dev, DevApiServer},
-        mixnet::MixnetApiServer,
+        // mixnet::MixnetApiServer,
         statement::StatementApiServer,
     };
     use sc_rpc_spec_v2::chain_spec::{ChainSpec, ChainSpecApiServer};
