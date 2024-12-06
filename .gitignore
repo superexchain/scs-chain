@@ -5,7 +5,7 @@
 .DS_Store
 .env*
 .idea
-db*
+*db*
 keystore
 .local
 .lycheecache
