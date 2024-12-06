@@ -421,11 +421,6 @@ pub fn testnet_genesis(
                 })
                 .collect::<Vec<_>>(),
         },
-        // "grandpa": {
-        // 	"authorities": initial_authorities.iter()
-        // 		.map(|x| {(x.2.clone(), 1000_000)}).collect::<Vec<_>>(),
-        // 	// "_config": (),
-        // },
         "staking": {
             "validatorCount": initial_authorities.len() as u32,
             "minimumValidatorCount": initial_authorities.len() as u32,
@@ -438,7 +433,6 @@ pub fn testnet_genesis(
         "babe": {
             "epochConfig": Some(kitchensink_mainnet_runtime::BABE_GENESIS_EPOCH_CONFIG),
         },
-        "society": { "pot": 0 },
 
         "nominationPools": {
             "minCreateBond": 10 * DOLLARS,

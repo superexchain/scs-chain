@@ -292,7 +292,6 @@ pub fn devnet_genesis(
         "babe": {
             "epochConfig": Some(kitchensink_devnet_runtime::BABE_GENESIS_EPOCH_CONFIG),
         },
-        "society": { "pot": 0 },
         "nominationPools": {
             "minCreateBond": 10 * DOLLARS,
             "minJoinBond": 1 * DOLLARS,
