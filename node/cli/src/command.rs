@@ -33,6 +33,8 @@ use frame_benchmarking_cli::*;
 use kitchensink_mainnet_runtime::{ExistentialDeposit, RuntimeApi};
 #[cfg(feature = "tscs")]
 use kitchensink_testnet_runtime::{ExistentialDeposit, RuntimeApi};
+#[cfg(feature = "dscs")]
+use kitchensink_devnet_runtime::{ExistentialDeposit, RuntimeApi};
 
 use sc_network::{Litep2pNetworkBackend, NetworkBackend};
 // use node_primitives::Block;
@@ -83,6 +85,13 @@ impl SubstrateCli for Cli {
             "staging" | "testnet" | "" => Box::new(chain_spec::testnet::tscs_config()?),
             "tscs-local" => Box::new(chain_spec::testnet::staging_testnet_config()),
             path => Box::new(chain_spec::testnet::ChainSpec::from_json_file(
+                std::path::PathBuf::from(path),
+            )?),
+        };
+        #[cfg(feature = "dscs")]
+        let spec = match id {
+            "dev" => Box::new(chain_spec::devnet::development_config()),
+            path => Box::new(chain_spec::devnet::ChainSpec::from_json_file(
                 std::path::PathBuf::from(path),
             )?),
         };

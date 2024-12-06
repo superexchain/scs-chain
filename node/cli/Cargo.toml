@@ -54,6 +54,8 @@ polkadot-sdk = { git="https://github.com/paritytech/polkadot-sdk", branch="relea
 # Shared code between the staging node and kitchensink runtime:
 kitchensink-mainnet-runtime = { path = "../../runtime/mainnet", optional = true }
 kitchensink-testnet-runtime = { path = "../../runtime/testnet", optional = true }
+kitchensink-devnet-runtime = { path = "../../runtime/devnet", optional = true }
+
 common-runtime = {path = "../../runtime/common"}
 
 
@@ -124,7 +126,7 @@ cli = [
 
 tscs = ["kitchensink-testnet-runtime"]
 scs = ["kitchensink-mainnet-runtime"]
-# all-runtimes = ["tscs", "scs"]
+dscs = ["kitchensink-devnet-runtime"]
 
 runtime-benchmarks = [
 	"kitchensink-mainnet-runtime/runtime-benchmarks",
