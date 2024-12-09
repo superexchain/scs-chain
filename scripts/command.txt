@@ -4,3 +4,7 @@
 
 # bootnode and nginx setting
 https://wiki.polkadot.network/docs/maintain-bootnode
+
+
+./target/release/scs  --chain dev  --base-path ./devdb
+./target/release/scs  --chain dev  --base-path ./devdb --pruning archive

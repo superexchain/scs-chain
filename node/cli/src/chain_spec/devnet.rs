@@ -310,7 +310,7 @@ fn development_config_genesis_json() -> serde_json::Value {
         vec![authority_keys_from_alice()], // vec![AccountId::from(hex!("d43593c715fdd31c61141abd04a99fd6822c8558"))],
         vec![],
         // ALITH
-        AccountId::from(hex!("f24FF3a9CF04c71Dbc94D0b566f7A27B94566cac")),
+        AccountId::from(hex!("3Cd0A705a2DC65e5b1E1205896BaA2be8A07c6e0")),
         Some(vec![AccountId::from(hex!(
             "f24FF3a9CF04c71Dbc94D0b566f7A27B94566cac"
         ))]),
