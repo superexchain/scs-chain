@@ -5,6 +5,11 @@
 # bootnode and nginx setting
 https://wiki.polkadot.network/docs/maintain-bootnode
 
-
-./target/release/scs  --chain dev  --base-path ./devdb
 ./target/release/scs  --chain dev  --base-path ./devdb --pruning archive
+./target/release/scs  --chain dev --alice --base-path ./devdb1 --pruning archive
+
+./target/release/scs  --chain dev  --base-path ./devdb1 --pruning archive
+./target/release/scs  --chain dev --alice --base-path ./devdb1 --pruning archive
+
+./target/release/scs export-blocks --chain dev  --base-path ./devdb --pruning archive --to 1000 h.json
+./target/release/scs import-blocks --chain dev  --base-path ./devdb1 --pruning archive  h.json  
