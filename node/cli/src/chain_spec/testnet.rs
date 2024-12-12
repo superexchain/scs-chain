@@ -73,10 +73,6 @@ pub struct Extensions {
 
 /// Specialized `ChainSpec`.
 pub type ChainSpec = sc_service::GenericChainSpec<Extensions>;
-/// Flaming Fir testnet generator
-// pub fn flaming_fir_config() -> Result<ChainSpec, String> {
-// 	ChainSpec::from_json_bytes(&include_bytes!("../res/flaming-fir.json")[..])
-// }
 
 pub fn tscs_config() -> Result<ChainSpec, String> {
     ChainSpec::from_json_bytes(&include_bytes!("../../res/tscs-chain-spec.json")[..])
@@ -374,18 +370,6 @@ fn configure_accounts(
     let stakers = initial_authorities
         .iter()
         .map(|x| (x.0.clone(), x.0.clone(), stash, StakerStatus::Validator))
-        // .chain(initial_nominators.iter().map(|x| {
-        // 	use rand::{seq::SliceRandom, Rng};
-        // 	let limit = (MaxNominations::get() as usize).min(initial_authorities.len());
-        // 	let count = rng.gen::<usize>() % limit;
-        // 	let nominations = initial_authorities
-        // 		.as_slice()
-        // 		.choose_multiple(&mut rng, count)
-        // 		.into_iter()
-        // 		.map(|choice| choice.0.clone())
-        // 		.collect::<Vec<_>>();
-        // 	(x.clone(), x.clone(), stash, StakerStatus::Nominator(nominations))
-        // }))
         .collect::<Vec<_>>();
 
     let num_endowed_accounts = endowed_accounts.len();
@@ -424,50 +408,6 @@ pub fn testnet_genesis(
             STASH,
         );
 
-    // let evm_accounts = {
-    // 	let mut map = BTreeMap::new();
-    // map.insert(
-    // 	// H160 address of Alice dev account
-    // 	// Derived from SS58 (42 prefix) address
-    // 	// SS58: 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
-    // 	// hex: 0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d
-    // 	// Using the full hex key, truncating to the first 20 bytes (the first 40 hex chars)
-    // 	H160::from_str("d43593c715fdd31c61141abd04a99fd6822c8558")
-    // 		.expect("internal H160 is valid; qed"),
-    // 	fp_evm::GenesisAccount {
-    // 		balance: U256::from_str("0xffffffffffffffffffffffffffffffff")
-    // 			.expect("internal U256 is valid; qed"),
-    // 		code: Default::default(),
-    // 		nonce: Default::default(),
-    // 		storage: Default::default(),
-    // 	},
-    // );
-    // map.insert(
-    // 	// H160 address of CI test runner account
-    // 	H160::from_str("6be02d1d3665660d22ff9624b7be0551ee1ac91b")
-    // 		.expect("internal H160 is valid; qed"),
-    // 	fp_evm::GenesisAccount {
-    // 		balance: U256::from_str("0xffffffffffffffffffffffffffffffff")
-    // 			.expect("internal U256 is valid; qed"),
-    // 		code: Default::default(),
-    // 		nonce: Default::default(),
-    // 		storage: Default::default(),
-    // 	},
-    // );
-    // map.insert(
-    // 	// H160 address for benchmark usage
-    // 	H160::from_str("1000000000000000000000000000000000000001")
-    // 		.expect("internal H160 is valid; qed"),
-    // 	fp_evm::GenesisAccount {
-    // 		nonce: U256::from(1),
-    // 		balance: U256::from(1_000_000_000_000_000_000_000_000u128),
-    // 		storage: Default::default(),
-    // 		code: vec![0x00],
-    // 	},
-    // );
-    // 	map
-    // };
-
     serde_json::json!({
         "balances": {
             "balances": endowed_accounts.iter().cloned().map(|x| (x, ENDOWMENT)).chain(extra_endowed_accounts_balance).collect::<Vec<_>>(),
@@ -491,11 +431,6 @@ pub fn testnet_genesis(
                 })
                 .collect::<Vec<_>>(),
         },
-        // "grandpa": {
-        // 	"authorities": initial_authorities.iter()
-        // 		.map(|x| {(x.2.clone(), 1000_000)}).collect::<Vec<_>>(),
-        // 	// "_config": (),
-        // },
         "staking": {
             "validatorCount": initial_authorities.len() as u32,
             "minimumValidatorCount": initial_authorities.len() as u32,
@@ -503,35 +438,16 @@ pub fn testnet_genesis(
             "slashRewardFraction": Perbill::from_percent(10),
             "stakers": stakers.clone(),
         },
-        // "elections": {
-        // 	"members": endowed_accounts
-        // 		.iter()
-        // 		.take((num_endowed_accounts + 1) / 2)
-        // 		.cloned()
-        // 		.map(|member| (member, STASH))
-        // 		.collect::<Vec<_>>(),
-        // },
-        // "technicalCommittee": {
-        // 	"members": endowed_accounts
-        // 		.iter()
-        // 		.take((num_endowed_accounts + 1) / 2)
-        // 		.cloned()
-        // 		.collect::<Vec<_>>(),
-        // },
         "sudo": { "key": Some(root_key.clone()) },
         "babe": {
             "epochConfig": Some(kitchensink_testnet_runtime::BABE_GENESIS_EPOCH_CONFIG),
         },
         "society": { "pot": 0 },
-        // "assets": {
-        // 	"assets": vec![],
-        // },
         "nominationPools": {
             "minCreateBond": 10 * DOLLARS,
             "minJoinBond": 1 * DOLLARS,
         },
         "evmChainId": { "chainId": evm_chain_id },
-        // "evm": { "accounts": evm_accounts },
     })
 }
 
@@ -579,25 +495,6 @@ pub fn development_config() -> ChainSpec {
         .with_genesis_config_patch(development_config_genesis_json())
         .build()
 }
-
-// fn local_testnet_genesis() -> serde_json::Value {
-// 	testnet_genesis(
-// 		vec![authority_keys_from_seed("Alice"), authority_keys_from_seed("Bob")],
-// 		vec![],
-// 		get_account_id_from_seed::<ecdsa::Public>("Alice"),
-// 		None,
-// 	)
-// }
-//
-// /// Local testnet config (multivalidator Alice + Bob).
-// pub fn local_testnet_config() -> ChainSpec {
-// 	ChainSpec::builder(wasm_binary_unwrap(), Default::default())
-// 		.with_name("Local Testnet")
-// 		.with_id("local_testnet")
-// 		.with_chain_type(ChainType::Local)
-// 		.with_genesis_config_patch(local_testnet_genesis())
-// 		.build()
-// }
 
 #[cfg(test)]
 pub(crate) mod tests {

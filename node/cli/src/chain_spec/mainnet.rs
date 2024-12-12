@@ -228,10 +228,6 @@ pub fn staging_testnet_config() -> ChainSpec {
         )
         .with_chain_type(ChainType::Live)
         .with_genesis_config_patch(staging_testnet_config_genesis(chain_id))
-        // .with_telemetry_endpoints(
-        // 	TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])
-        // 		.expect("Staging telemetry url is valid; qed"),
-        // )
         .build()
 }
 
