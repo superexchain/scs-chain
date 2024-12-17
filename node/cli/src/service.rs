@@ -140,10 +140,6 @@ pub fn new_partial<NB>(
         sc_consensus::DefaultImportQueue<Block>,
         sc_transaction_pool::FullPool<Block, FullClient>,
         (
-            // impl Fn(
-            // 	node_rpc::DenyUnsafe,
-            // 	sc_rpc::SubscriptionTaskExecutor,
-            // ) -> Result<jsonrpsee::RpcModule<()>, sc_service::Error>,
             (
                 sc_consensus_babe::BabeBlockImport<
                     Block,
@@ -181,11 +177,6 @@ where
         .transpose()?;
 
     let executor = sc_service::new_wasm_executor(&config);
-    // let FrontierPartialComponents {
-    // 	filter_pool,
-    // 	fee_history_cache,
-    // 	fee_history_cache_limit,
-    // } = new_frontier_partial(&eth_config)?;
     let (client, backend, keystore_container, task_manager) =
         sc_service::new_full_parts::<Block, RuntimeApi, _>(
             config,
@@ -273,8 +264,6 @@ where
     )
     .map_err(|e| ServiceError::Other(format!("Statement store error: {:?}", e)))?;
 
-    // let (mixnet_api, mixnet_api_backend) = mixnet_config.map(sc_mixnet::Api::new).unzip();
-
     Ok(sc_service::PartialComponents {
         client,
         backend,
@@ -360,8 +349,6 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
         config.prometheus_config.as_ref().map(|cfg| &cfg.registry),
     );
 
-    // let (block_import, grandpa_link, babe_link, beefy_links) = import_setup;
-
     let auth_disc_publish_non_global_ips = config.network.allow_non_globals_in_dht;
     let auth_disc_public_addresses = config.network.public_addresses.clone();
 
@@ -415,19 +402,6 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
         );
     net_config.add_notification_protocol(statement_config);
 
-    // let mixnet_protocol_name =
-    //     sc_mixnet::protocol_name(genesis_hash.as_ref(), config.chain_spec.fork_id());
-    // let mixnet_notification_service = mixnet_config.as_ref().map(|mixnet_config| {
-    //     let (config, notification_service) = sc_mixnet::peers_set_config::<_, N>(
-    //         mixnet_protocol_name.clone(),
-    //         mixnet_config,
-    //         metrics.clone(),
-    //         Arc::clone(&peer_store_handle),
-    //     );
-    //     net_config.add_notification_protocol(config);
-    //     notification_service
-    // });
-
     let warp_sync = Arc::new(grandpa::warp_proof::NetworkProvider::new(
         backend.clone(),
         import_setup.1.shared_authority_set().clone(),
@@ -447,22 +421,6 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
             block_relay: None,
             metrics,
         })?;
-
-    // if let Some(mixnet_config) = mixnet_config {
-    // 	let mixnet = sc_mixnet::run(
-    // 		mixnet_config,
-    // 		mixnet_api_backend.expect("Mixnet API backend created if mixnet enabled"),
-    // 		client.clone(),
-    // 		sync_service.clone(),
-    // 		network.clone(),
-    // 		mixnet_protocol_name,
-    // 		transaction_pool.clone(),
-    // 		Some(keystore_container.keystore()),
-    // 		mixnet_notification_service
-    // 			.expect("`NotificationService` exists since mixnet was enabled; qed"),
-    // 	);
-    // 	task_manager.spawn_handle().spawn("mixnet", None, mixnet);
-    // }
 
     let storage_override =
         Arc::new(StorageOverrideHandler::<Block, FullClient, FullBackend>::new(client.clone()));
@@ -497,12 +455,6 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
         let keystore = keystore_container.keystore();
         let chain_spec = config.chain_spec.cloned_box();
 
-        // let net_config = sc_network::config::FullNetworkConfiguration::<
-        //     Block,
-        //     <Block as BlockT>::Hash,
-        //     Litep2pNetworkBackend,
-        // >::new(&config.network);
-
         let frontier_backend = match eth_config.frontier_backend_type {
             BackendType::KeyValue => FrontierBackend::KeyValue(Arc::new(fc_db::kv::Backend::open(
                 Arc::clone(&client),
@@ -534,24 +486,6 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
 
         let frontier_backend1 = Arc::new(frontier_backend);
         let frontier_backend2 = frontier_backend1.clone();
-        // todo warp_sync_params
-
-        // let metrics = N::register_notification_metrics(
-        //     config.prometheus_config.as_ref().map(|cfg| &cfg.registry),
-        // );
-        // let (network, system_rpc_tx, tx_handler_controller, network_starter, sync_service) =
-        // 	sc_service::build_network(sc_service::BuildNetworkParams {
-        // 		config: &config,
-        // 		net_config,
-        // 		client: client.clone(),
-        // 		transaction_pool: transaction_pool.clone(),
-        // 		spawn_handle: task_manager.spawn_handle(),
-        // 		import_queue,
-        // 		block_announce_validator_builder: None,
-        // 		warp_sync_params: None,
-        // 		block_relay: None,
-        // 		metrics,
-        // 	})?;
 
         let prometheus_registry = config.prometheus_registry().cloned();
 

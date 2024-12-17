@@ -79,6 +79,7 @@ fp-rpc = { workspace = true, features = ["default"] }
 
 # 
 babe-consensus-data-provider = { workspace = true }
+ecdsa-keyring = { workspace = true}
 
 #frontier-template-runtime = { workspace = true, features = ["std"] }
 

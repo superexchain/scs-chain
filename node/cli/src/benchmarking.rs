@@ -21,10 +21,11 @@
 //! Should only be used for benchmarking as it may break in other contexts.
 #![cfg(any(feature = "scs", feature = "tscs", feature = "dscs"))]
 
-use crate::service::{FullClient};
-use codec::{Encode};
+use crate::service::FullClient;
+use codec::Encode;
 use sc_client_api::BlockBackend;
-use sp_core::{Pair, ecdsa};
+use ecdsa_keyring::Keyring;
+use sp_core::Pair;
 use polkadot_sdk::*;
 use sp_runtime::SaturatedConversion;
 #[cfg(feature = "scs")]
@@ -67,7 +68,8 @@ impl frame_benchmarking_cli::ExtrinsicBuilder for RemarkBuilder {
 	}
 
 	fn build(&self, nonce: u32) -> std::result::Result<OpaqueExtrinsic, &'static str> {
-		let acc = ecdsa::Pair::from_string("//Bob", None).expect("static values are valid; qed");
+		let acc = Keyring::Alith.pair();
+		// let acc = Keyring::Bala
 		let extrinsic: OpaqueExtrinsic = create_extrinsic(
 			self.client.as_ref(),
 			acc,
@@ -106,7 +108,7 @@ impl frame_benchmarking_cli::ExtrinsicBuilder for TransferKeepAliveBuilder {
 	}
 
 	fn build(&self, nonce: u32) -> std::result::Result<OpaqueExtrinsic, &'static str> {
-		let acc = ecdsa::Pair::from_string("//Bob", None).expect("static values are valid; qed");
+		let acc = Keyring::Alith.pair();
 		let extrinsic: OpaqueExtrinsic = create_extrinsic(
 			self.client.as_ref(),
 			acc,
