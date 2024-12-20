@@ -22,9 +22,9 @@
 #![allow(unused_variables)]
 #![allow(clippy::clone_on_copy)]
 
-use hex_literal::hex;
-use ecdsa_keyring::Keyring;
 use common_runtime::AccountId;
+use ecdsa_keyring::Keyring;
+use hex_literal::hex;
 use kitchensink_devnet_runtime::{
     constants::currency::*, wasm_binary_unwrap, Block, MaxNominations, SessionKeys, StakerStatus,
 };
@@ -98,7 +98,6 @@ fn session_keys(
     }
 }
 
-
 /// Helper function to generate a crypto pair from seed.
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
     TPublic::Pair::from_string(&format!("//{}", seed), None)
@@ -121,6 +120,30 @@ pub fn authority_keys_from_alice() -> (
     (
         Keyring::Alith.into(),
         Keyring::Alith.into(),
+        get_from_seed::<GrandpaId>(seed),
+        get_from_seed::<BabeId>(seed),
+        get_from_seed::<ImOnlineId>(seed),
+        get_from_seed::<AuthorityDiscoveryId>(seed),
+        get_from_seed::<MixnetId>(seed),
+        get_from_seed::<BeefyId>(seed),
+    )
+}
+
+/// Helper function to generate stash, controller and session key from seed.
+pub fn authority_keys_from_bob() -> (
+    AccountId,
+    AccountId,
+    GrandpaId,
+    BabeId,
+    ImOnlineId,
+    AuthorityDiscoveryId,
+    MixnetId,
+    BeefyId,
+) {
+    let seed = "Bob";
+    (
+        Keyring::Baltathar.into(),
+        Keyring::Baltathar.into(),
         get_from_seed::<GrandpaId>(seed),
         get_from_seed::<BabeId>(seed),
         get_from_seed::<ImOnlineId>(seed),
@@ -263,15 +286,12 @@ pub fn devnet_genesis(
 }
 
 fn development_config_genesis_json() -> serde_json::Value {
-    let extra_endowed_accounts_balance = vec![(
-       Keyring::Baltathar.into(),
-        1000_000_000 * DOLLARS,
-    )];
+    let extra_endowed_accounts_balance = vec![(Keyring::CharLeth.into(), 1000_000_000 * DOLLARS)];
     devnet_genesis(
-        vec![authority_keys_from_alice()],
+        vec![authority_keys_from_alice(), authority_keys_from_bob()],
         vec![],
         Keyring::Alith.into(),
-        Some(vec![Keyring::Alith.into(),]),
+        Some(vec![Keyring::Alith.into(), Keyring::Baltathar.into()]),
         extra_endowed_accounts_balance,
         42u32,
     )

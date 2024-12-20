@@ -29,7 +29,6 @@
 //! hasn't been tested.
 
 #![cfg(any(feature = "scs", feature = "tscs", feature = "dscs"))]
-
 #![allow(missing_docs)]
 
 #[cfg(feature = "cli")]

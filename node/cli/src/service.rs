@@ -41,20 +41,20 @@ use common_runtime::opaque::Block;
 use frame_benchmarking_cli::SUBSTRATE_REFERENCE_HARDWARE;
 use frame_system_rpc_runtime_api::AccountNonceApi;
 use futures::prelude::*;
+#[cfg(feature = "dscs")]
+use kitchensink_devnet_runtime::RuntimeApi;
 #[cfg(feature = "scs")]
 use kitchensink_mainnet_runtime::RuntimeApi;
 #[cfg(feature = "tscs")]
 use kitchensink_testnet_runtime::RuntimeApi;
-#[cfg(feature = "dscs")]
-use kitchensink_devnet_runtime::RuntimeApi;
 // use node_primitives::Block;
 use fc_storage::StorageOverrideHandler;
+#[cfg(feature = "dscs")]
+use kitchensink_devnet_runtime::TransactionConverter;
 #[cfg(feature = "scs")]
 use kitchensink_mainnet_runtime::TransactionConverter;
 #[cfg(feature = "tscs")]
 use kitchensink_testnet_runtime::TransactionConverter;
-#[cfg(feature = "dscs")]
-use kitchensink_devnet_runtime::TransactionConverter;
 use sc_client_api::{Backend as BackendT, BlockBackend};
 use sc_consensus_babe::{self, BabeWorkerHandle, SlotProportion};
 use sc_network::{
@@ -325,7 +325,7 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
     let name = config.network.node_name.clone();
     let enable_grandpa = !config.disable_grandpa;
     let prometheus_registry = config.prometheus_registry().cloned();
-    let enable_offchain_worker = config.offchain_worker.enabled;
+    // let enable_offchain_worker = config.offchain_worker.enabled;
 
     let hwbench = (!disable_hardware_benchmarks)
         .then_some(config.database.path().map(|database_path| {
@@ -861,28 +861,28 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
         statement_handler.run(),
     );
 
-    if enable_offchain_worker {
-        task_manager.spawn_handle().spawn(
-            "offchain-workers-runner",
-            "offchain-work",
-            sc_offchain::OffchainWorkers::new(sc_offchain::OffchainWorkerOptions {
-                runtime_api_provider: client.clone(),
-                keystore: Some(keystore_container.keystore()),
-                offchain_db: backend.offchain_storage(),
-                transaction_pool: Some(OffchainTransactionPoolFactory::new(
-                    transaction_pool.clone(),
-                )),
-                network_provider: Arc::new(network.clone()),
-                is_validator: role.is_authority(),
-                enable_http_requests: true,
-                custom_extensions: move |_| {
-                    vec![Box::new(statement_store.clone().as_statement_store_ext()) as Box<_>]
-                },
-            })
-            .run(client.clone(), task_manager.spawn_handle())
-            .boxed(),
-        );
-    }
+    // if enable_offchain_worker {
+    //     task_manager.spawn_handle().spawn(
+    //         "offchain-workers-runner",
+    //         "offchain-work",
+    //         sc_offchain::OffchainWorkers::new(sc_offchain::OffchainWorkerOptions {
+    //             runtime_api_provider: client.clone(),
+    //             keystore: Some(keystore_container.keystore()),
+    //             offchain_db: backend.offchain_storage(),
+    //             transaction_pool: Some(OffchainTransactionPoolFactory::new(
+    //                 transaction_pool.clone(),
+    //             )),
+    //             network_provider: Arc::new(network.clone()),
+    //             is_validator: role.is_authority(),
+    //             enable_http_requests: true,
+    //             custom_extensions: move |_| {
+    //                 vec![Box::new(statement_store.clone().as_statement_store_ext()) as Box<_>]
+    //             },
+    //         })
+    //         .run(client.clone(), task_manager.spawn_handle())
+    //         .boxed(),
+    //     );
+    // }
 
     network_starter.start_network();
     Ok(NewFullBase {

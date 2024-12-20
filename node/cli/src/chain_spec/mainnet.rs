@@ -21,11 +21,11 @@
 #![allow(unused_imports)]
 
 use common_runtime::AccountId;
+use ecdsa_keyring::Keyring;
 use hex_literal::hex;
 use kitchensink_mainnet_runtime::{
     constants::currency::*, wasm_binary_unwrap, Block, MaxNominations, SessionKeys, StakerStatus,
 };
-use ecdsa_keyring::Keyring;
 use pallet_im_online::sr25519::AuthorityId as ImOnlineId;
 use polkadot_sdk::*;
 use sc_chain_spec::ChainSpecExtension;
@@ -247,7 +247,6 @@ where
     AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
 
-
 /// Helper function to generate stash, controller and session key from seed.
 pub fn authority_keys_from_alice() -> (
     AccountId,
@@ -428,7 +427,7 @@ fn development_config_genesis_json() -> serde_json::Value {
         vec![authority_keys_from_alice()], // vec![AccountId::from(hex!("d43593c715fdd31c61141abd04a99fd6822c8558"))],
         vec![],
         Keyring::Alith.into(),
-        Some(vec![Keyring::Alith.into(),]),
+        Some(vec![Keyring::Alith.into()]),
         extra_endowed_accounts_balance,
         42u32,
     )
