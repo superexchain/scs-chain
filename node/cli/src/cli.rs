@@ -84,6 +84,26 @@ pub struct EthConfiguration {
     pub frontier_sql_backend_cache_size: u64,
 }
 
+impl Default for EthConfiguration {
+    fn default() -> Self {
+        EthConfiguration {
+            max_past_logs: 10000,
+            fee_history_limit: 2048,
+            enable_dev_signer: false,
+            target_gas_price: 1,
+            execute_gas_limit_multiplier: 10,
+            eth_log_block_cache: 50,
+            eth_statuses_cache: 50,
+            frontier_backend_type: BackendType::default(),
+            frontier_sql_backend_pool_size: 100,
+            frontier_sql_backend_num_ops_timeout: 10000000,
+            frontier_sql_backend_thread_count: 4,
+            frontier_sql_backend_cache_size: 209715200,
+        }
+    }
+}
+
+
 /// An overarching CLI command definition.
 #[derive(Debug, clap::Parser)]
 pub struct Cli {

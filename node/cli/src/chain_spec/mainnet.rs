@@ -449,7 +449,7 @@ pub fn development_config() -> ChainSpec {
         .build()
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "dscs"))]
 pub(crate) mod tests {
     use super::*;
     use crate::service::{new_full_base, NewFullBase};

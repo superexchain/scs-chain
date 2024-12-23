@@ -315,7 +315,7 @@ pub fn development_config() -> ChainSpec {
 
 
 #[cfg(test)]
-pub mod test {
+pub mod tests {
     use sp_runtime::BuildStorage;
     use super::ChainSpecExtension;
     use super::development_config;

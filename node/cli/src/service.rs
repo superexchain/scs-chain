@@ -940,15 +940,18 @@ pub fn new_full(
     Ok(task_manager)
 }
 
-// #[cfg(test)]
+// #[cfg(all(test, feature = "dscs"))]
 // mod tests {
 // 	use crate::service::{new_full_base, NewFullBase};
+//     use crate::cli::EthConfiguration;
 // 	use codec::Encode;
-// 	use kitchensink_mainnet_runtime::{
+// 	use kitchensink_devnet_runtime::{
 // 		constants::{currency::CENTS, time::SLOT_DURATION},
 // 		Address, BalancesCall, RuntimeCall, opaque::UncheckedExtrinsic,
 // 	};
-// 	use node_primitives::{Block, DigestItem, Signature};
+//     use ecdsa_keyring::Keyring;
+// 	use kitchensink_devnet_runtime::{Block, };
+//     use node_primitives::{DigestItem, Signature};
 // 	use polkadot_sdk::*;
 // 	use sc_client_api::BlockBackend;
 // 	use sc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy};
@@ -970,16 +973,16 @@ pub fn new_full(
 // 	};
 // 	use sp_timestamp;
 // 	use std::sync::Arc;
-//
+
 // 	type AccountPublic = <Signature as Verify>::Signer;
-//
+
 // 	#[test]
 // 	// It is "ignored", but the node-cli ignored tests are running on the CI.
 // 	// This can be run locally with `cargo test --release -p node-cli test_sync -- --ignored`.
 // 	#[ignore]
 // 	fn test_sync() {
 // 		sp_tracing::try_init_simple();
-//
+
 // 		let keystore_path = tempfile::tempdir().expect("Creates keystore path");
 // 		let keystore: KeystorePtr = LocalKeystore::open(keystore_path.path(), None)
 // 			.expect("Creates keystore")
@@ -988,17 +991,17 @@ pub fn new_full(
 // 			.sr25519_generate_new(BABE, Some("//Alice"))
 // 			.expect("Creates authority pair")
 // 			.into();
-//
-// 		let chain_spec = crate::chain_spec::tests::integration_test_config_with_single_authority();
-//
+
+// 		let chain_spec = crate::chain_spec::devnet::tests::intergration_dev_config();
+
 // 		// For the block factory
 // 		let mut slot = 1u64;
-//
+
 // 		// For the extrinsics factory
-// 		let bob = Arc::new(AccountKeyring::Bob.pair());
-// 		let charlie = Arc::new(AccountKeyring::Charlie.pair());
+// 		let bob = Arc::new(Keyring::Baltathar.pair());
+// 		let charlie = Arc::new(Keyring::CharLeth.pair());
 // 		let mut index = 0;
-//
+
 // 		sc_service_test::sync(
 // 			chain_spec,
 // 			|config| {
@@ -1006,6 +1009,7 @@ pub fn new_full(
 // 				let NewFullBase { task_manager, client, network, sync, transaction_pool, .. } =
 // 					new_full_base::<sc_network::NetworkWorker<_, _>>(
 // 						config,
+//                         EthConfiguration::default(),
 // 						None,
 // 						false,
 // 						|block_import: &sc_consensus_babe::BabeBlockImport<Block, _, _>,
@@ -1013,7 +1017,7 @@ pub fn new_full(
 // 							setup_handles = Some((block_import.clone(), babe_link.clone()));
 // 						},
 // 					)?;
-//
+
 // 				let node = sc_service_test::TestNetComponents::new(
 // 					task_manager,
 // 					client,
@@ -1027,11 +1031,11 @@ pub fn new_full(
 // 				let parent_hash = service.client().chain_info().best_hash;
 // 				let parent_header = service.client().header(parent_hash).unwrap().unwrap();
 // 				let parent_number = *parent_header.number();
-//
+
 // 				futures::executor::block_on(service.transaction_pool().maintain(
 // 					ChainEvent::NewBestBlock { hash: parent_header.hash(), tree_route: None },
 // 				));
-//
+
 // 				let mut proposer_factory = sc_basic_authorship::ProposerFactory::new(
 // 					service.spawn_handle(),
 // 					service.client(),
@@ -1039,9 +1043,9 @@ pub fn new_full(
 // 					None,
 // 					None,
 // 				);
-//
+
 // 				let mut digest = Digest::default();
-//
+
 // 				// even though there's only one authority some slots might be empty,
 // 				// so we must keep trying the next slots until we can claim one.
 // 				let (babe_pre_digest, epoch_descriptor) = loop {
@@ -1056,7 +1060,7 @@ pub fn new_full(
 // 						)
 // 						.unwrap()
 // 						.unwrap();
-//
+
 // 					let epoch = babe_link
 // 						.epoch_changes()
 // 						.shared_data()
@@ -1064,17 +1068,17 @@ pub fn new_full(
 // 							sc_consensus_babe::Epoch::genesis(babe_link.config(), slot)
 // 						})
 // 						.unwrap();
-//
+
 // 					if let Some(babe_pre_digest) =
 // 						sc_consensus_babe::authorship::claim_slot(slot.into(), &epoch, &keystore)
 // 							.map(|(digest, _)| digest)
 // 					{
 // 						break (babe_pre_digest, epoch_descriptor)
 // 					}
-//
+
 // 					slot += 1;
 // 				};
-//
+
 // 				let inherent_data = futures::executor::block_on(
 // 					(
 // 						sp_timestamp::InherentDataProvider::new(
@@ -1085,9 +1089,9 @@ pub fn new_full(
 // 						.create_inherent_data(),
 // 				)
 // 				.expect("Creates inherent data");
-//
+
 // 				digest.push(<DigestItem as CompatibleDigestItem>::babe_pre_digest(babe_pre_digest));
-//
+
 // 				let new_block = futures::executor::block_on(async move {
 // 					let proposer = proposer_factory.init(&parent_header).await;
 // 					proposer
@@ -1097,7 +1101,7 @@ pub fn new_full(
 // 				})
 // 				.expect("Error making test block")
 // 				.block;
-//
+
 // 				let (new_header, new_body) = new_block.deconstruct();
 // 				let pre_hash = new_header.hash();
 // 				// sign the pre-sealed hash of the block and then
@@ -1109,7 +1113,7 @@ pub fn new_full(
 // 					.unwrap();
 // 				let item = <DigestItem as CompatibleDigestItem>::babe_seal(signature.into());
 // 				slot += 1;
-//
+
 // 				let mut params = BlockImportParams::new(BlockOrigin::File, new_header);
 // 				params.post_digests.push(item);
 // 				params.body = Some(new_body);
@@ -1118,7 +1122,7 @@ pub fn new_full(
 // 					BabeIntermediate::<Block> { epoch_descriptor },
 // 				);
 // 				params.fork_choice = Some(ForkChoiceStrategy::LongestChain);
-//
+
 // 				futures::executor::block_on(block_import.import_block(params))
 // 					.expect("error importing test block");
 // 			},
@@ -1133,12 +1137,12 @@ pub fn new_full(
 // 					(version.spec_version, version.transaction_version)
 // 				};
 // 				let signer = charlie.clone();
-//
+
 // 				let function = RuntimeCall::Balances(BalancesCall::transfer_allow_death {
 // 					dest: to.into(),
 // 					value: amount,
 // 				});
-//
+
 // 				let check_non_zero_sender = frame_system::CheckNonZeroSender::new();
 // 				let check_spec_version = frame_system::CheckSpecVersion::new();
 // 				let check_tx_version = frame_system::CheckTxVersion::new();
@@ -1184,14 +1188,14 @@ pub fn new_full(
 // 			},
 // 		);
 // 	}
-//
+
 // 	#[test]
 // 	#[ignore]
 // 	fn test_consensus() {
 // 		sp_tracing::try_init_simple();
-//
+
 // 		sc_service_test::consensus(
-// 			crate::chain_spec::tests::integration_test_config_with_two_authorities(),
+// 			crate::chain_spec::devnet::tests::intergration_dev_config(),
 // 			|config| {
 // 				let NewFullBase { task_manager, client, network, sync, transaction_pool, .. } =
 // 					new_full_base::<sc_network::NetworkWorker<_, _>>(
