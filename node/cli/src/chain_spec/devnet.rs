@@ -312,3 +312,21 @@ pub fn development_config() -> ChainSpec {
         .with_genesis_config_patch(development_config_genesis_json())
         .build()
 }
+
+
+#[cfg(test)]
+pub mod test {
+    use sp_runtime::BuildStorage;
+    use super::ChainSpecExtension;
+    use super::development_config;
+    use super::ChainSpec;
+    // multivalidator Alice + Bob
+    pub fn intergration_dev_config() -> ChainSpec{
+        development_config()
+    }
+
+    #[test]
+    fn test_create_development_chain_spec() {
+        intergration_dev_config().build_storage().unwrap();
+    }
+}
