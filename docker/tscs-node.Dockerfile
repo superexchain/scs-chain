@@ -31,5 +31,5 @@ RUN useradd -m -u 1000 -U -s /bin/base -d /scs scs && \
 USER scs
 EXPOSE 30333 9933 9944 9615
 VOLUME ["/data"]
-ENTRYPOINT ["/usr/local/bin/scs", "--chain", "staging", "--database", "auto", "--base-path", "/data" ]
+ENTRYPOINT ["/usr/local/bin/scs", "--base-path", "/data" ]
 CMD [ "--help" ]

@@ -409,46 +409,6 @@ pub fn testnet_genesis(
     })
 }
 
-fn development_config_genesis_json() -> serde_json::Value {
-    let extra_endowed_accounts_balance = vec![
-        (
-            AccountId::from(hex!("Acf2628C421137F6cb3E7D9c5B235B44ffdf9952")),
-            100_000_000 * DOLLARS,
-        ),
-        (
-            AccountId::from(hex!("8B3f123cf9F3b2E147142d3e99396695c09A34E7")),
-            100_000_000 * DOLLARS,
-        ),
-        (
-            AccountId::from(hex!("93A3A1c3dbccdbA8Df744a97f4Cc702e2F8663D1")),
-            50_000_000 * DOLLARS,
-        ),
-    ];
-    testnet_genesis(
-        vec![authority_keys_from_alice()], // vec![AccountId::from(hex!("d43593c715fdd31c61141abd04a99fd6822c8558"))],
-        vec![],
-        Keyring::Alith.into(),
-        Some(vec![Keyring::Alith.into(),]),
-        extra_endowed_accounts_balance,
-        42u32,
-    )
-}
-
-/// Development config (single validator Alice).
-pub fn development_config() -> ChainSpec {
-    ChainSpec::builder(wasm_binary_unwrap(), Default::default())
-        .with_name("Development")
-        .with_id("dev")
-        .with_chain_type(ChainType::Development)
-        .with_properties(
-            serde_json::from_str(
-                "{\"isEthereum\": true, \"tokenDecimals\": 18, \"tokenSymbol\": \"TSCS\"}",
-            )
-            .expect("Provided valid json map"),
-        )
-        .with_genesis_config_patch(development_config_genesis_json())
-        .build()
-}
 
 #[cfg(test)]
 pub(crate) mod tests {
