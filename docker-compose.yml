@@ -10,18 +10,18 @@ services:
 
   full_node:
     image: wjyask/tscs-node
-    entrypoint: ["/usr/local/bin/scs", "--database", "auto", "--base-path", "/data"]
-    command: ["--pruning", "archive", "--rpc-max-connections", "100", "--rpc-cors", "all", "--rpc-methods", "Unsafe", "--unsafe-rpc-external"]
+    command: ["--pruning", "archive",  "--database", "auto", "--rpc-max-connections", "100", "--rpc-cors", "all", "--rpc-methods", "Unsafe", "--unsafe-rpc-external"]
     volumes:
       - ./full_node:/data 
     ports:
       - 30333:30333
       - 8545:9944
       - 9933:9933
+    depends_on:
+      - init_full_node
     networks:
       - tscs
     
-
   init_validator_node:
     image: wjyask/tscs-node
     entrypoint: ["bash", "-c", "/usr/local/bin/validator_node_init.sh"]
@@ -32,15 +32,15 @@ services:
 
   validator_node:
     image: wjyask/tscs-node
-    entrypoint: ["/usr/local/bin/scs", "--database", "auto", "--base-path", "/data"]
-    command: ["--validator", "--pruning", "archive"]
+    command: ["--validator", "--pruning", "archive", "--database", "auto"]
     environment:
       - SESSION_KEYS_PASSWORD=root
     ports:
       - 30334:30333
       - 9944:9944
       - 9934:9933
-    
+    depends_on:
+      - init_validator_node
     volumes:
       - ./validator_node:/data
     
