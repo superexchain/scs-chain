@@ -17,7 +17,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 //! The Substrate runtime. This can be compiled with `#[no_std]`, ready for Wasm.
+//! 
 
+#![allow(unused_variables)]
+#![allow(dead_code)]
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limits.
 #![recursion_limit = "1024"]

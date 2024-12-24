@@ -46,15 +46,24 @@ services:
     
     networks:
       - tscs
-    deploy:
-      resources:
-        limits:
-          cpus: '12'
-          memory: '18G'
-        reservations:
-          cpus: '6'
-          memory: '12G'
-
+  
+  export_blocks:
+  image: wjyask/tscs-node
+  entrypoint: ["/usr/local/bin/scs"]
+  command: ["export-blocks", "--chain", "staging", "--database", "auto", "--base-path", "/data", "--pruning", "archive", "--to", "1472954", "/data/1472954.json"]
+  volumes:
+    - ./db:/data 
+  networks:
+      - tscs
+      
+  import_blocks:
+    image: wjyask/tscs-node
+    entrypoint: ["/usr/local/bin/scs"]
+    command: ["import-blocks", "--chain", "staging", "--database", "auto", "--base-path", "/data/new", "--pruning", "archive", "/data/1472954.json"]
+    volumes:
+      - ./db:/data 
+    networks:
+      - tscs
 
 networks:
   tscs:

@@ -1,4 +1,5 @@
 #![allow(unexpected_cfgs)]
+#![allow(unused_variables)]
 use jsonrpsee::RpcModule;
 use std::{collections::BTreeMap, sync::Arc};
 // Substrate
