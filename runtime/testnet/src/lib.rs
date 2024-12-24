@@ -783,7 +783,8 @@ impl pallet_staking::Config for Runtime {
         pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 4>,
     >;
     type SessionInterface = Self;
-    type EraPayout = pallet_staking::ConvertCurve<RewardCurve>;
+    // type EraPayout = pallet_staking::ConvertCurve<RewardCurve>;
+    type EraPayout = ();
     type NextNewSession = Session;
     type MaxExposurePageSize = ConstU32<256>;
     type ElectionProvider = ElectionProviderMultiPhase;
