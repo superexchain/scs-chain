@@ -74,9 +74,62 @@ pub struct Extensions {
 /// Specialized `ChainSpec`.
 pub type ChainSpec = sc_service::GenericChainSpec<Extensions>;
 
+/// Helper function to generate stash, controller and session key from seed.
+pub fn authority_keys_from_alice() -> (
+    AccountId,
+    AccountId,
+    GrandpaId,
+    BabeId,
+    ImOnlineId,
+    AuthorityDiscoveryId,
+    MixnetId,
+    BeefyId,
+) {
+    let seed = "Alice";
+    (
+        Keyring::Alith.into(),
+        Keyring::Alith.into(),
+        get_from_seed::<GrandpaId>(seed),
+        get_from_seed::<BabeId>(seed),
+        get_from_seed::<ImOnlineId>(seed),
+        get_from_seed::<AuthorityDiscoveryId>(seed),
+        get_from_seed::<MixnetId>(seed),
+        get_from_seed::<BeefyId>(seed),
+    )
+}
+
+/// Helper function to generate stash, controller and session key from seed.
+pub fn authority_keys_from_bob() -> (
+    AccountId,
+    AccountId,
+    GrandpaId,
+    BabeId,
+    ImOnlineId,
+    AuthorityDiscoveryId,
+    MixnetId,
+    BeefyId,
+) {
+    let seed = "Bob";
+    (
+        Keyring::Baltathar.into(),
+        Keyring::Baltathar.into(),
+        get_from_seed::<GrandpaId>(seed),
+        get_from_seed::<BabeId>(seed),
+        get_from_seed::<ImOnlineId>(seed),
+        get_from_seed::<AuthorityDiscoveryId>(seed),
+        get_from_seed::<MixnetId>(seed),
+        get_from_seed::<BeefyId>(seed),
+    )
+}
+
 pub fn tscs_config() -> Result<ChainSpec, String> {
     ChainSpec::from_json_bytes(&include_bytes!("../../res/tscs-chain-spec.json")[..])
 }
+
+pub fn dscs_config() -> Result<ChainSpec, String> {
+    ChainSpec::from_json_bytes(&include_bytes!("../../res/dscs-chain-spec.json")[..])
+}
+
 fn session_keys(
     // ed25519
     grandpa: GrandpaId,
@@ -260,30 +313,6 @@ where
     AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
 
-/// Helper function to generate stash, controller and session key from seed.
-pub fn authority_keys_from_alice() -> (
-    AccountId,
-    AccountId,
-    GrandpaId,
-    BabeId,
-    ImOnlineId,
-    AuthorityDiscoveryId,
-    MixnetId,
-    BeefyId,
-) {
-    let seed = "Alice";
-    (
-        Keyring::Alith.into(),
-        Keyring::Alith.into(),
-        get_from_seed::<GrandpaId>(seed),
-        get_from_seed::<BabeId>(seed),
-        get_from_seed::<ImOnlineId>(seed),
-        get_from_seed::<AuthorityDiscoveryId>(seed),
-        get_from_seed::<MixnetId>(seed),
-        get_from_seed::<BeefyId>(seed),
-    )
-}
-
 fn configure_accounts(
     initial_authorities: Vec<(
         AccountId,
@@ -417,6 +446,34 @@ pub fn testnet_genesis(
         },
         "evmChainId": { "chainId": evm_chain_id },
     })
+}
+
+fn development_config_genesis_json() -> serde_json::Value {
+    let extra_endowed_accounts_balance = vec![(Keyring::CharLeth.into(), 1000_000_000 * DOLLARS)];
+    testnet_genesis(
+        vec![authority_keys_from_alice(), authority_keys_from_bob()],
+        vec![],
+        Keyring::Alith.into(),
+        Some(vec![Keyring::Alith.into(), Keyring::Baltathar.into()]),
+        extra_endowed_accounts_balance,
+        42u32,
+    )
+}
+
+/// Development config (single validator Alice).
+pub fn development_config() -> ChainSpec {
+    ChainSpec::builder(wasm_binary_unwrap(), Default::default())
+        .with_name("SCS Devnet")
+        .with_id("dscs")
+        .with_chain_type(ChainType::Development)
+        .with_properties(
+            serde_json::from_str(
+                "{\"isEthereum\": true, \"tokenDecimals\": 18, \"tokenSymbol\": \"SCS\"}",
+            )
+            .expect("Provided valid json map"),
+        )
+        .with_genesis_config_patch(development_config_genesis_json())
+        .build()
 }
 
 

@@ -74,6 +74,10 @@ pub struct Extensions {
 /// Specialized `ChainSpec`.
 pub type ChainSpec = sc_service::GenericChainSpec<Extensions>;
 
+pub fn dscs_config() -> Result<ChainSpec, String> {
+    ChainSpec::from_json_bytes(&include_bytes!("../../res/tscs-chain-spec.json")[..])
+}
+
 fn session_keys(
     // ed25519
     grandpa: GrandpaId,
