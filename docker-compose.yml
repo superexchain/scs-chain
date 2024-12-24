@@ -10,6 +10,7 @@ services:
 
   full_node:
     image: wjyask/tscs-node
+    entrypoint: ["/usr/local/bin/scs", "--database", "auto", "--base-path", "/data"]
     command: ["--pruning", "archive", "--rpc-max-connections", "100", "--rpc-cors", "all", "--rpc-methods", "Unsafe", "--unsafe-rpc-external"]
     volumes:
       - ./full_node:/data 
@@ -31,6 +32,7 @@ services:
 
   validator_node:
     image: wjyask/tscs-node
+    entrypoint: ["/usr/local/bin/scs", "--database", "auto", "--base-path", "/data"]
     command: ["--validator", "--pruning", "archive"]
     environment:
       - SESSION_KEYS_PASSWORD=root

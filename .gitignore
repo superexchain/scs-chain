@@ -45,6 +45,7 @@ tscs-docker-compose.yml
 rpc_node/
 node1/
 node2/
+*_node/
 full_node/
 private/
 private*
