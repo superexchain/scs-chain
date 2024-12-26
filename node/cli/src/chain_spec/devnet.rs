@@ -54,7 +54,7 @@ type AccountPublic = <Signature as Verify>::Signer;
 
 // const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
 const ENDOWMENT: Balance = 100 * DOLLARS;
-const STASH: Balance = ENDOWMENT;
+const STASH: Balance = 50 * DOLLARS;
 
 /// Node `ChainSpec` extensions.
 ///
