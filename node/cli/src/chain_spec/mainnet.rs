@@ -217,7 +217,7 @@ fn staging_testnet_config_genesis(chain_id: u32) -> serde_json::Value {
 pub fn staging_testnet_config() -> ChainSpec {
     let chain_id = 1970u32;
     ChainSpec::builder(wasm_binary_unwrap(), Default::default())
-        .with_name("SuperEx Smart Chain")
+        .with_name("Super Smart Chain")
         .with_id("scs")
         .with_protocol_id("scs")
         .with_fork_id("scs")
