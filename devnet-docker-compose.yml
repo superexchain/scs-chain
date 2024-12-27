@@ -1,18 +1,18 @@
-version: '1.0.0'
+version: '3.2'
 
 services:
 
   init_alice:
     image: wjyask/tscs-node:latest
     entrypoint: ["/usr/local/bin/scs"]
-    command: ["key", "generate-node-key", "--base-path", "/data"]
+    command: ["key", "generate-node-key", "--base-path", "/data", "--chain", "dev"]
     volumes:
       - ./db/alice:/data
   
   init_bob:
     image: wjyask/tscs-node:latest
     entrypoint: ["/usr/local/bin/scs"]
-    command: ["key", "generate-node-key", "--base-path", "/data"]
+    command: ["key", "generate-node-key", "--base-path", "/data", "--chain", "dev"]
     volumes:
       - ./db/bob:/data
 
