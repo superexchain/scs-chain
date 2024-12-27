@@ -27,14 +27,13 @@ services:
     entrypoint: ["bash", "-c", "/usr/local/bin/validator_node_init.sh"]
     environment:
       - SESSION_KEYS_PASSWORD=root
+      - INDEX = 1
     volumes:
       - ./validator_node:/data
 
   validator_node:
     image: wjyask/tscs-node
     command: ["--validator", "--pruning", "archive", "--database", "auto"]
-    environment:
-      - SESSION_KEYS_PASSWORD=root
     ports:
       - 30334:30333
       - 9944:9944

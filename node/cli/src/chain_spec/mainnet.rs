@@ -141,7 +141,7 @@ fn configure_accounts_for_staging_testnet() -> (
 		// 	1
 		(
 			AccountId::from(hex!("6816562B9589ccf4297952A8558A0451c1EB5aEc")),
-			AccountId::from(hex!("7b40aAD2388f62f21bbDeb2272995893d6e311a4")),
+			AccountId::from(hex!("6816562B9589ccf4297952A8558A0451c1EB5aEc")),
 
 			// 5Ch6ttXs15pWBa4R2kB8RUiw7JHuChPANj6iXF1AZHQmz7cG
 			array_bytes::hex2array_unchecked("1bc2636a29f850f49a69ccb416cd14812759651205d6b655298307f9365e9364")
@@ -168,7 +168,7 @@ fn configure_accounts_for_staging_testnet() -> (
 		// 2
 		(
 			AccountId::from(hex!("3E3d44a81C8773d7C27270E2f9830f25d87a5f41")),
-			AccountId::from(hex!("90390b2E136a7482E8432cA5B03D5faEef8E5003")),
+			AccountId::from(hex!("3E3d44a81C8773d7C27270E2f9830f25d87a5f41")),
 			
 			// 5GzwG5sGrPevSYRcjWnw4JwkMD27dKTEXnxfunYPEyZjSzru
 			array_bytes::hex2array_unchecked("da4d4e7d925a0a2134ba624f74be93577beab7052da6730e8b3e70e57c20b099")
@@ -195,14 +195,14 @@ fn configure_accounts_for_staging_testnet() -> (
 
     let root_key: AccountId = AccountId::from(hex!("79BD79C274C845E8a29378513c0053b19395E863"));
 
-    let endowed_accounts: Vec<AccountId> = vec![root_key.clone()];
+    let endowed_accounts: Vec<AccountId> = vec![];
     (initial_authorities, root_key, endowed_accounts)
 }
 
 fn staging_testnet_config_genesis(chain_id: u32) -> serde_json::Value {
     let (initial_authorities, root_key, endowed_accounts) =
         configure_accounts_for_staging_testnet();
-    let extra_endowed_accounts_balance = vec![];
+    let extra_endowed_accounts_balance = vec![(root_key.clone(), ENDOWMENT), ];
     testnet_genesis(
         initial_authorities,
         vec![],
@@ -326,7 +326,7 @@ fn configure_accounts(
     // let mut rng = rand::thread_rng();
     let stakers = initial_authorities
         .iter()
-        .map(|x| (x.0.clone(), x.0.clone(), stash, StakerStatus::Validator))
+        .map(|x| (x.0.clone(), x.1.clone(), stash, StakerStatus::Validator))
         .collect::<Vec<_>>();
 
     let num_endowed_accounts = endowed_accounts.len();
