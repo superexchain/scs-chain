@@ -17,6 +17,14 @@ welcome to [SuperEx](https://www.superex.com/)
 - [build local node](./docs/build-node-local.md)
 - [build docker node](./docs/build-node-docker.md)
 
+## Add TSCS Network to MetaMask
+```
+Network name: TSCS Network
+Default RPC URL: scschain-rpc.novax.dev:2083
+Chain ID: 1969
+Currency symbol: TSCS
+```
+
 ## document
 
 [https://superexchain.github.io/](https://superexchain.github.io/)
