@@ -514,16 +514,15 @@ parameter_types! {
 impl pallet_evm_chain_id::Config for Runtime {}
 
 pub struct FindAuthorTruncated<F>(PhantomData<F>);
+pub struct FindAuthorTruncated<F>(PhantomData<F>);
 impl<F: FindAuthor<u32>> FindAuthor<H160> for FindAuthorTruncated<F> {
     fn find_author<'a, I>(digests: I) -> Option<H160>
     where
         I: 'a + IntoIterator<Item = (ConsensusEngineId, &'a [u8])>,
     {
         if let Some(author_index) = F::find_author(digests) {
-            let authority_id = pallet_babe::Authorities::<Runtime>::get()[author_index as usize]
-                .clone()
-                .0;
-            return Some(H160::from_slice(&authority_id.to_raw_vec()[4..24]));
+            let authority_id = pallet_session::Validators::<Runtime>::get()[author_index as usize]
+            return Some(H160::from_slice(&authority_id.to_raw_vec()[..]));
         }
         None
     }
@@ -587,6 +586,7 @@ impl pallet_evm::Config for Runtime {
     type OnChargeTransaction = ();
     type OnCreate = ();
     type FindAuthor = FindAuthorTruncated<Babe>;
+    // fixme 应该是这个东西的问题？
     type GasLimitPovSizeRatio = GasLimitPovSizeRatio;
     type SuicideQuickClearLimit = SuicideQuickClearLimit;
     type Timestamp = Timestamp;

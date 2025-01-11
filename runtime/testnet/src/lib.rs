@@ -253,7 +253,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     // and set impl_version to 0. If only runtime
     // implementation changes and behavior does not, then leave spec_version as
     // is and increment impl_version.
-    spec_version: 278,
+    spec_version: 280,
     impl_version: 0,
     apis: RUNTIME_API_VERSIONS,
     transaction_version: 2,
@@ -521,10 +521,8 @@ impl<F: FindAuthor<u32>> FindAuthor<H160> for FindAuthorTruncated<F> {
         I: 'a + IntoIterator<Item = (ConsensusEngineId, &'a [u8])>,
     {
         if let Some(author_index) = F::find_author(digests) {
-            let authority_id = pallet_babe::Authorities::<Runtime>::get()[author_index as usize]
-                .clone()
-                .0;
-            return Some(H160::from_slice(&authority_id.to_raw_vec()[4..24]));
+            let authority_id = pallet_session::Validators::<Runtime>::get()[author_index as usize]
+            return Some(H160::from_slice(&authority_id.to_raw_vec()[..]));
         }
         None
     }
