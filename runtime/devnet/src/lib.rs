@@ -585,7 +585,6 @@ impl pallet_evm::Config for Runtime {
     type OnChargeTransaction = ();
     type OnCreate = ();
     type FindAuthor = FindAuthorTruncated<Babe>;
-    // fixme 应该是这个东西的问题？
     type GasLimitPovSizeRatio = GasLimitPovSizeRatio;
     type SuicideQuickClearLimit = SuicideQuickClearLimit;
     type Timestamp = Timestamp;
