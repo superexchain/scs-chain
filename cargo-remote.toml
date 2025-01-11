@@ -1,0 +1,7 @@
+
+[[remote]]
+name = "dev"
+host = "root@dev" 
+ssh_port = 58822
+temp_dir = "/root/dev/" 
+env = "~/.profile" 
