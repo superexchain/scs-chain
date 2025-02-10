@@ -5,7 +5,7 @@ RUN apt update && apt install -y make clang pkg-config libssl-dev protobuf-compi
 	rustup update nightly && \
 	rustup component add rust-src && \
 	rustup target add wasm32-unknown-unknown --toolchain nightly
-	
+
 WORKDIR /scs
 COPY . /scs
 RUN cargo build --release --features scs
@@ -21,7 +21,7 @@ COPY --from=builder /scs/target/release/scs /usr/local/bin
 COPY --from=builder /scs/scripts/validator_node_init.sh /usr/local/bin
 COPY --from=builder /scs/scripts/normal_node_init.sh /usr/local/bin
 
-RUN useradd -m -u 1000 -U -s /bin/base -d /scs scs && \
+RUN useradd -m -u 1000 -U -s /bin/bash -d /scs scs && \
 	mkdir -p /data /scs/.local/share/scs && \
 	chown -R scs:scs /data && \
 	ln -s /data /scs/.local/share/scs && \

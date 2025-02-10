@@ -21,7 +21,7 @@ COPY --from=builder /scs/target/release/scs /usr/local/bin
 COPY --from=builder /scs/scripts/validator_node_init.sh /usr/local/bin
 COPY --from=builder /scs/scripts/normal_node_init.sh /usr/local/bin
 
-RUN useradd -m -u 1000 -U -s /bin/base -d /scs scs && \
+RUN useradd -m -u 1000 -U -s /bin/bash -d /scs scs && \
 	mkdir -p /data /scs/.local/share/scs && \
 	chown -R scs:scs /data && \
 	ln -s /data /scs/.local/share/scs && \
