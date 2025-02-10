@@ -96,7 +96,7 @@ use sp_consensus_beefy::{
 };
 use sp_consensus_grandpa::AuthorityId as GrandpaId;
 use sp_core::{
-    crypto::{ByteArray, KeyTypeId},
+    crypto::{KeyTypeId},
     OpaqueMetadata, H160, U256,
 };
 use sp_inherents::{CheckInherentsResult, InherentData};
