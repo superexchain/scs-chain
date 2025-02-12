@@ -5,12 +5,14 @@ services:
   init_alice:
     image: wjyask/tscs-node:latest
     entrypoint: ["/usr/local/bin/scs"]
+    user: root
     command: ["key", "generate-node-key", "--base-path", "/data", "--chain", "dev"]
     volumes:
       - ./db/alice:/data
   
   init_bob:
     image: wjyask/tscs-node:latest
+    user: root
     entrypoint: ["/usr/local/bin/scs"]
     command: ["key", "generate-node-key", "--base-path", "/data", "--chain", "dev"]
     volumes:
@@ -18,6 +20,7 @@ services:
 
   alice:
     image: wjyask/tscs-node:latest
+    user: root
     entrypoint: ["/usr/local/bin/scs", "--database", "auto", "--chain", "dev"]
     # command: ["--pruning", "archive", "--base-path", "/data", "--alice", "--rpc-max-connections", "100", "--rpc-cors", "all", "--rpc-methods", "Unsafe", "--unsafe-rpc-external"]
     command: ["--pruning", "archive", "--base-path", "/data", "--alice", "--rpc-max-connections", "100", "--rpc-cors", "all", "--rpc-methods", "Unsafe", "--rpc-external"]
@@ -35,6 +38,7 @@ services:
       
   bob:
     image: wjyask/tscs-node:latest
+    user: root
     entrypoint: ["/usr/local/bin/scs", "--database", "auto", "--chain", "dev"]
     # command: ["--pruning", "archive", "--base-path", "/data", "--bob", "--rpc-max-connections", "100", "--rpc-cors", "all", "--rpc-methods", "Unsafe", "--unsafe-rpc-external"]
     command: ["--pruning", "archive", "--base-path", "/data", "--bob", "--rpc-max-connections", "100", "--rpc-cors", "all", "--rpc-methods", "Unsafe", "--rpc-external"]
