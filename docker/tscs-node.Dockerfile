@@ -29,6 +29,7 @@ RUN useradd -m -u 1000 -U -s /bin/bash -d /scs scs && \
 	ldd /usr/local/bin/scs && \
     chmod 777 /usr/local/bin/validator_node_init.sh && \
 	chmod 777 /usr/local/bin/normal_node_init.sh && \
+	chmod 777 /data && \
 	/usr/local/bin/scs --version
 
 USER scs
