@@ -15,8 +15,8 @@ docker buildx build --platform linux/amd64,linux/arm64 -t wjyask/scs-node:1.0.0 
 
 ```
 
-## build dscs-node
+<!-- ## build dscs-node
 ```
 docker buildx build --platform linux/amd64,linux/arm64 -t wjyask/dscs-node:1.0.0 -t wjyask/dscs-node:latest  --push -f ./docker/dscs-node.Dockerfile .
 
-```
+``` -->

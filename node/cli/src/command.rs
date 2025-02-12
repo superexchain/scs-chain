@@ -94,7 +94,7 @@ impl SubstrateCli for Cli {
         };
         #[cfg(feature = "dscs")]
         let spec = match id {
-            "dev" => Box::new(chain_spec::devnet::development_config()),
+            "dev" | "" => Box::new(chain_spec::devnet::development_config()),
             path => Box::new(chain_spec::devnet::ChainSpec::from_json_file(
                 std::path::PathBuf::from(path),
             )?),
