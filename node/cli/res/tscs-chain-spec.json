@@ -2,7 +2,7 @@
   "name": "TSCS Network",
   "id": "tscs",
   "chainType": "Live",
-  "bootNodes": ["/dns/tscs-bootnode-01.scschain.com/tcp/2087/wss/p2p/12D3KooWH8zXKBjfTSLnyVwmXawFPugdSUmuGqwgGXnyhzyBCmuM"],
+  "bootNodes": ["/dns/tscs-bootnode-01.scschain.com/tcp/443/wss/p2p/12D3KooWH8zXKBjfTSLnyVwmXawFPugdSUmuGqwgGXnyhzyBCmuM"],
   "telemetryEndpoints": null,
   "protocolId": "scs",
   "forkId": "tscs",
