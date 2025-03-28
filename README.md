@@ -23,6 +23,7 @@ Network name: TSCS Network
 Default RPC URL: https://testnetrpc.scschain.com (wss://testnetrpc.scschain.com)
 Chain ID: 1969
 Currency symbol: TSCS
+Block explorer URL: https://testnetscan.scschain.com/
 ```
 
 ## document
