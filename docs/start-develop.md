@@ -4,3 +4,9 @@
 ### build
 - [build node in your local environment](./build-node-local.md)
 - [build node in docker](./build-node-docker.md)
+  
+
+### run
+```
+docker-compose -f devnet-docker-compose.yml up
+```
