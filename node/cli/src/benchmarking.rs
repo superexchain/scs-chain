@@ -19,13 +19,11 @@
 //! Setup code for [`super::command`] which would otherwise bloat that module.
 //!
 //! Should only be used for benchmarking as it may break in other contexts.
-#![cfg(any(feature = "scs", feature = "tscs", feature = "dscs"))]
+#![cfg(any(feature = "scs", feature = "tscs"))]
 
 use crate::service::FullClient;
 use codec::Encode;
 use ecdsa_keyring::Keyring;
-#[cfg(feature = "dscs")]
-use kitchensink_devnet_runtime::{self as runtime, BalancesCall, SystemCall, UncheckedExtrinsic};
 #[cfg(feature = "scs")]
 use kitchensink_mainnet_runtime::{self as runtime, BalancesCall, SystemCall, UncheckedExtrinsic};
 #[cfg(feature = "tscs")]

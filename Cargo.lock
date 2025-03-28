@@ -6275,34 +6275,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c33070833c9ee02266356de0c43f723152bd38bd96ddf52c82b3af10c9138b28"
 
 [[package]]
-name = "kitchensink-devnet-runtime"
-version = "3.0.0-dev"
-dependencies = [
- "fp-account",
- "fp-evm",
- "fp-rpc",
- "fp-self-contained",
- "log",
- "node-primitives 2.0.0",
- "pallet-balances",
- "pallet-base-fee",
- "pallet-dynamic-fee",
- "pallet-ethereum",
- "pallet-evm",
- "pallet-evm-chain-id",
- "pallet-evm-precompile-modexp",
- "pallet-evm-precompile-sha3fips",
- "pallet-evm-precompile-simple",
- "parity-scale-codec",
- "polkadot-sdk",
- "primitive-types 0.12.2",
- "scale-info",
- "serde_json",
- "static_assertions",
- "substrate-wasm-builder",
-]
-
-[[package]]
 name = "kitchensink-mainnet-runtime"
 version = "3.0.0-dev"
 dependencies = [
@@ -17195,7 +17167,6 @@ dependencies = [
  "futures",
  "hex-literal",
  "jsonrpsee",
- "kitchensink-devnet-runtime",
  "kitchensink-mainnet-runtime",
  "kitchensink-testnet-runtime",
  "log",

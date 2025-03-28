@@ -15,7 +15,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-#![cfg(any(feature = "scs", feature = "tscs", feature = "dscs"))]
+#![cfg(any(feature = "scs", feature = "tscs"))]
 #![allow(unused_imports)]
 #![allow(unreachable_patterns)]
 
@@ -30,8 +30,6 @@ use crate::{
 use common_runtime::opaque::Block;
 use ecdsa_keyring::Keyring;
 use frame_benchmarking_cli::*;
-#[cfg(feature = "dscs")]
-use kitchensink_devnet_runtime::{ExistentialDeposit, RuntimeApi, EXISTENTIAL_DEPOSIT};
 #[cfg(feature = "scs")]
 use kitchensink_mainnet_runtime::{ExistentialDeposit, RuntimeApi, EXISTENTIAL_DEPOSIT};
 #[cfg(feature = "tscs")]
@@ -89,13 +87,6 @@ impl SubstrateCli for Cli {
             "dscs-local" => Box::new(chain_spec::testnet::development_config()),
             "dev" => Box::new(chain_spec::testnet::dscs_config()?),
             path => Box::new(chain_spec::testnet::ChainSpec::from_json_file(
-                std::path::PathBuf::from(path),
-            )?),
-        };
-        #[cfg(feature = "dscs")]
-        let spec = match id {
-            "dev" | "" => Box::new(chain_spec::devnet::development_config()),
-            path => Box::new(chain_spec::devnet::ChainSpec::from_json_file(
                 std::path::PathBuf::from(path),
             )?),
         };
