@@ -20,7 +20,7 @@ welcome to [SuperEx](https://www.superex.com/)
 ## Add TSCS Network to MetaMask
 ```
 Network name: TSCS Network
-Default RPC URL: https://scschain-rpc.novax.dev:2083
+Default RPC URL: https://testnetrpc.scschain.com (wss://testnetrpc.scschain.com)
 Chain ID: 1969
 Currency symbol: TSCS
 ```
